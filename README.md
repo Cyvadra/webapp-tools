@@ -116,6 +116,77 @@ pnpm build
 pnpm exec vite preview
 ```
 
+## Nginx 部署与伪静态
+
+项目使用 React Router 的前端路由模式，部署到 Nginx 后需要把未知路径回退到 `index.html`，否则直接访问 `/tools/:toolId` 这类地址时会返回 404。
+
+### 根目录部署示例
+
+假设构建产物已上传到 `/www/wwwroot/your-site/dist`：
+
+```nginx
+server {
+  listen 80;
+  server_name your-domain.com;
+
+  root /www/wwwroot/your-site/dist;
+  index index.html;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  location /assets/ {
+    expires 30d;
+    add_header Cache-Control "public, max-age=2592000, immutable";
+  }
+}
+```
+
+其中关键配置是：
+
+```nginx
+try_files $uri $uri/ /index.html;
+```
+
+它的作用是：
+
+- 请求命中真实文件时直接返回静态文件
+- 请求命中真实目录时返回目录资源
+- 其他路径统一回退到 `index.html`，再由前端路由处理
+
+### 部署步骤
+
+1. 在本地执行 `pnpm build`。
+2. 将 `dist/` 目录中的文件上传到 Nginx 站点根目录。
+3. 在站点配置中加入上述 `server` 配置，或至少加入 `location /` 中的 `try_files` 规则。
+4. 执行 `nginx -t` 检查配置。
+5. 执行 `systemctl reload nginx` 或 `nginx -s reload` 使配置生效。
+
+### 部署到子目录时的说明
+
+如果不是部署到站点根目录，而是部署到类似 `/tools/` 的子路径下，除了 Nginx 改写规则外，还需要同时配置 Vite 的 `base`，否则静态资源路径会解析错误。
+
+例如：
+
+```ts
+export default defineConfig({
+  base: '/tools/',
+  // ...
+})
+```
+
+对应的 Nginx 示例：
+
+```nginx
+location /tools/ {
+  alias /www/wwwroot/your-site/dist/;
+  try_files $uri $uri/ /tools/index.html;
+}
+```
+
+如果你当前就是部署在根目录，可以只使用“根目录部署示例”中的配置。
+
 ## 项目结构
 
 ```text
