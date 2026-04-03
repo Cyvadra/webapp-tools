@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { ArrowLeft, ExternalLink, Home, Search } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Search } from 'lucide-react';
 import { Link, useParams } from 'react-router';
 import { ToolCard } from '../components/ToolCard';
 import { ToolRenderer } from '../components/ToolRenderer';
@@ -73,34 +73,31 @@ export function ToolPage() {
     <div className="min-h-screen bg-[linear-gradient(180deg,_#f9fbff_0%,_#ffffff_48%,_#f8fafc_100%)]">
       <header className="border-b border-slate-200 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto max-w-[1800px] px-4 py-5 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-                <Link to="/" className="inline-flex items-center gap-1 transition hover:text-slate-900">
-                  <Home className="h-4 w-4" />
-                  首页
-                </Link>
-                <span>/</span>
-                <span>{tool.categoryName}</span>
-                <span>/</span>
-                <span className="text-slate-900">{tool.name}</span>
-              </div>
-
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="min-w-0 space-y-4">
               <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-100">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sky-50 ring-1 ring-sky-100">
                   <Icon className="h-7 w-7 text-sky-600" />
                 </div>
-                <div>
+                <div className="min-w-0">
+                  <div className="mb-3 flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+                      {tool.categoryName}
+                    </span>
+                    <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-500">
+                      在线工具
+                    </span>
+                  </div>
                   <h1 className="text-3xl font-semibold tracking-tight text-slate-900">{tool.name}</h1>
                   <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600 sm:text-base">{tool.description}</p>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 lg:justify-end">
               <Link
                 to="/"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
+                className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(2,132,199,0.28)] transition hover:-translate-y-0.5 hover:bg-sky-500 hover:shadow-[0_16px_32px_rgba(2,132,199,0.34)]"
               >
                 <ArrowLeft className="h-4 w-4" />
                 返回工具列表
@@ -109,7 +106,7 @@ export function ToolPage() {
                 href={getToolPath(tool.id)}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm text-white transition hover:bg-slate-700"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
               >
                 <ExternalLink className="h-4 w-4" />
                 新标签打开

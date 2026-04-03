@@ -3,18 +3,7 @@ import { Search, Sparkles, X } from 'lucide-react';
 import { useSearchParams } from 'react-router';
 import { ToolCard } from '../components/ToolCard';
 import { allCategoryId, categories, getToolPath, tools, type Tool } from '../data/tools';
-
-function matchesToolSearch(tool: Tool, normalizedQuery: string) {
-  if (!normalizedQuery) {
-    return true;
-  }
-
-  return (
-    tool.name.toLowerCase().includes(normalizedQuery) ||
-    tool.description.toLowerCase().includes(normalizedQuery) ||
-    tool.keywords.some((keyword) => keyword.toLowerCase().includes(normalizedQuery))
-  );
-}
+import { matchesToolSearch } from '../utils/toolSearch';
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -78,7 +67,9 @@ export function HomePage() {
     const nextValue = event.target.value;
     setDraftQuery(nextValue);
 
-    if (event.nativeEvent.isComposing || isComposingRef.current) {
+    const nativeEvent = event.nativeEvent as InputEvent;
+
+    if (nativeEvent.isComposing || isComposingRef.current) {
       return;
     }
 
@@ -141,7 +132,7 @@ export function HomePage() {
               <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
               <input
                 type="search"
-                placeholder="全局搜索工具，例如：简繁、JSON、Base64、时间戳"
+                placeholder="示例：jianfan、zfcs、JSON、Base64、时间戳"
                 value={draftQuery}
                 onChange={updateSearch}
                 onCompositionStart={handleCompositionStart}
@@ -161,7 +152,7 @@ export function HomePage() {
             </div>
 
             <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 shadow-sm">
-              {isSearching ? `已在全部分类中找到 ${totalCount} 个结果` : '未搜索时可按分类浏览'}
+              {isSearching ? `已在全部分类中找到 ${totalCount} 个结果` : '支持关键词、拼音首字母和模糊搜索'}
             </div>
           </div>
 
