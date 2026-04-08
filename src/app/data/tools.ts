@@ -85,6 +85,18 @@ export const tools: Tool[] = [
     keywords: ['rsa', '加密', '解密', '非对称'],
     component: 'RSATool'
   },
+  {
+    id: 'aes-crack',
+    name: 'AES 弱口令破解',
+    description: '使用常见弱口令尝试破解 AES 密文',
+    category: 'crypto',
+    categoryName: '加密解密',
+    categoryIcon: Key,
+    categoryColor: 'text-purple-600',
+    icon: Key,
+    keywords: ['aes', '破解', '弱口令', 'crack', 'decrypt', '解密'],
+    component: 'AESCrackTool'
+  },
 
   // 编码转换
   {
