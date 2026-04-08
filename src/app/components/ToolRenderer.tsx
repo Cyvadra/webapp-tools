@@ -14,6 +14,7 @@ const toolComponents: Record<string, ComponentType> = {
   SHATool: lazyTool(() => import('./tools/SHATool'), 'SHATool'),
   Base64Tool: lazyTool(() => import('./tools/Base64Tool'), 'Base64Tool'),
   AESTool: lazyTool(() => import('./tools/AESTool'), 'AESTool'),
+  AESCrackTool: lazyTool(() => import('./tools/AESCrackTool'), 'AESCrackTool'),
   RSATool: lazyTool(() => import('./tools/RSATool'), 'RSATool'),
   URLEncodeTool: lazyTool(() => import('./tools/URLEncodeTool'), 'URLEncodeTool'),
   UnicodeTool: lazyTool(() => import('./tools/UnicodeTool'), 'UnicodeTool'),
