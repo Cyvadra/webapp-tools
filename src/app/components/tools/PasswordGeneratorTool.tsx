@@ -7,6 +7,15 @@ const NUMBERS = '0123456789';
 const SEPARATORS = '-_';
 const SPECIAL = '!@#$%^&*()_+-=[]{}|;:,.<>?';
 
+/** 2^32 — used to normalize a Uint32 value to the [0, 1) range */
+const UINT32_RANGE = 0x100000000;
+
+function randomIndex(max: number): number {
+  const arr = new Uint32Array(1);
+  crypto.getRandomValues(arr);
+  return arr[0] % max;
+}
+
 function generatePassword(
   length: number,
   useLower: boolean,
@@ -20,23 +29,23 @@ function generatePassword(
 
   if (useLower) {
     charset += LOWERCASE;
-    requiredChars.push(LOWERCASE[Math.floor(Math.random() * LOWERCASE.length)]);
+    requiredChars.push(LOWERCASE[randomIndex(LOWERCASE.length)]);
   }
   if (useUpper) {
     charset += UPPERCASE;
-    requiredChars.push(UPPERCASE[Math.floor(Math.random() * UPPERCASE.length)]);
+    requiredChars.push(UPPERCASE[randomIndex(UPPERCASE.length)]);
   }
   if (useNumbers) {
     charset += NUMBERS;
-    requiredChars.push(NUMBERS[Math.floor(Math.random() * NUMBERS.length)]);
+    requiredChars.push(NUMBERS[randomIndex(NUMBERS.length)]);
   }
   if (useSeparators) {
     charset += SEPARATORS;
-    requiredChars.push(SEPARATORS[Math.floor(Math.random() * SEPARATORS.length)]);
+    requiredChars.push(SEPARATORS[randomIndex(SEPARATORS.length)]);
   }
   if (useSpecial) {
     charset += SPECIAL;
-    requiredChars.push(SPECIAL[Math.floor(Math.random() * SPECIAL.length)]);
+    requiredChars.push(SPECIAL[randomIndex(SPECIAL.length)]);
   }
 
   if (!charset) return '';
@@ -46,9 +55,9 @@ function generatePassword(
 
   const passwordChars = Array.from(array, (val) => charset[val % charset.length]);
 
-  // Replace random positions with required chars to ensure each chosen type appears
+  // Scatter required chars across random positions to ensure each chosen type appears
   for (let i = 0; i < requiredChars.length && i < length; i++) {
-    const swapIdx = i + Math.floor((array[i] / 0x100000000) * (length - i));
+    const swapIdx = i + Math.floor((array[i] / UINT32_RANGE) * (length - i));
     passwordChars[swapIdx] = requiredChars[i];
   }
 
