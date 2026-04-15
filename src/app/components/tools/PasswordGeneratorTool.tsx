@@ -59,13 +59,20 @@ function generatePassword(
 
   if (!charset) return '';
 
-  // Generate each character using unbiased rejection sampling via randomIndex()
-  const passwordChars = Array.from({ length }, () => charset[randomIndex(charset.length)]);
+  // Start with one guaranteed character from each selected type (up to `length` types)
+  const guaranteedChars = requiredChars.slice(0, length);
 
-  // Scatter required chars across random positions to ensure each chosen type appears.
-  for (let i = 0; i < requiredChars.length && i < length; i++) {
-    const swapIdx = i + randomIndex(length - i);
-    passwordChars[swapIdx] = requiredChars[i];
+  // Fill remaining positions randomly from the full charset
+  const extraChars = Array.from(
+    { length: length - guaranteedChars.length },
+    () => charset[randomIndex(charset.length)],
+  );
+
+  // Combine and shuffle using Fisher-Yates for uniform distribution
+  const passwordChars = [...guaranteedChars, ...extraChars];
+  for (let i = passwordChars.length - 1; i > 0; i--) {
+    const j = randomIndex(i + 1);
+    [passwordChars[i], passwordChars[j]] = [passwordChars[j], passwordChars[i]];
   }
 
   return passwordChars.join('');
@@ -96,15 +103,21 @@ export function PasswordGeneratorTool() {
   };
 
   const handleCopyOne = (index: number) => {
-    navigator.clipboard.writeText(passwords[index]);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
+    navigator.clipboard.writeText(passwords[index]).then(() => {
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 2000);
+    }).catch(() => {
+      alert('复制失败，请手动复制');
+    });
   };
 
   const handleCopyAll = () => {
-    navigator.clipboard.writeText(passwords.join('\n'));
-    setCopiedAll(true);
-    setTimeout(() => setCopiedAll(false), 2000);
+    navigator.clipboard.writeText(passwords.join('\n')).then(() => {
+      setCopiedAll(true);
+      setTimeout(() => setCopiedAll(false), 2000);
+    }).catch(() => {
+      alert('复制失败，请手动复制');
+    });
   };
 
   const checkboxClass = (active: boolean) =>
