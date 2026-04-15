@@ -59,17 +59,12 @@ function generatePassword(
 
   if (!charset) return '';
 
-  const array = new Uint32Array(length);
-  crypto.getRandomValues(array);
-
-  const passwordChars = Array.from(array, (val) => charset[val % charset.length]);
+  // Generate each character using unbiased rejection sampling via randomIndex()
+  const passwordChars = Array.from({ length }, () => charset[randomIndex(charset.length)]);
 
   // Scatter required chars across random positions to ensure each chosen type appears.
-  // Use a separate array of fresh random values to avoid reusing entropy from `array`.
-  const shuffleArray = new Uint32Array(requiredChars.length);
-  crypto.getRandomValues(shuffleArray);
   for (let i = 0; i < requiredChars.length && i < length; i++) {
-    const swapIdx = i + Math.floor((shuffleArray[i] / UINT32_RANGE) * (length - i));
+    const swapIdx = i + randomIndex(length - i);
     passwordChars[swapIdx] = requiredChars[i];
   }
 
