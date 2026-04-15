@@ -46,6 +46,7 @@ const toolComponents: Record<string, ComponentType> = {
   ColorPickerTool: lazyTool(() => import('./tools/ColorPickerTool'), 'ColorPickerTool'),
   RegexTestTool: lazyTool(() => import('./tools/RegexTestTool'), 'RegexTestTool'),
   RegexGenerateTool: lazyTool(() => import('./tools/RegexGenerateTool'), 'RegexGenerateTool'),
+  PasswordGeneratorTool: lazyTool(() => import('./tools/PasswordGeneratorTool'), 'PasswordGeneratorTool'),
 };
 
 export function ToolRenderer({ componentName }: ToolRendererProps) {

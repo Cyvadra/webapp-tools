@@ -97,6 +97,18 @@ export const tools: Tool[] = [
     keywords: ['aes', '破解', '弱口令', 'crack', 'decrypt', '解密'],
     component: 'AESCrackTool'
   },
+  {
+    id: 'password-generator',
+    name: '密码生成器',
+    description: '按指定选项批量生成随机密码',
+    category: 'crypto',
+    categoryName: '加密解密',
+    categoryIcon: Key,
+    categoryColor: 'text-purple-600',
+    icon: Key,
+    keywords: ['密码', '生成', 'password', 'generator', '随机', 'random'],
+    component: 'PasswordGeneratorTool'
+  },
 
   // 编码转换
   {
