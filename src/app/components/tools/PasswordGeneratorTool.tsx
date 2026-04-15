@@ -10,10 +10,19 @@ const SPECIAL = '!@#$%^&*()_+-=[]{}|;:,.<>?';
 /** 2^32 — used to normalize a Uint32 value to the [0, 1) range */
 const UINT32_RANGE = 0x100000000;
 
+/**
+ * Returns a cryptographically secure random integer in [0, max).
+ * Uses rejection sampling to avoid modulo bias.
+ */
 function randomIndex(max: number): number {
+  const limit = Math.floor(UINT32_RANGE / max) * max;
   const arr = new Uint32Array(1);
-  crypto.getRandomValues(arr);
-  return arr[0] % max;
+  let val: number;
+  do {
+    crypto.getRandomValues(arr);
+    val = arr[0];
+  } while (val >= limit);
+  return val % max;
 }
 
 function generatePassword(
@@ -55,9 +64,12 @@ function generatePassword(
 
   const passwordChars = Array.from(array, (val) => charset[val % charset.length]);
 
-  // Scatter required chars across random positions to ensure each chosen type appears
+  // Scatter required chars across random positions to ensure each chosen type appears.
+  // Use a separate array of fresh random values to avoid reusing entropy from `array`.
+  const shuffleArray = new Uint32Array(requiredChars.length);
+  crypto.getRandomValues(shuffleArray);
   for (let i = 0; i < requiredChars.length && i < length; i++) {
-    const swapIdx = i + Math.floor((array[i] / UINT32_RANGE) * (length - i));
+    const swapIdx = i + Math.floor((shuffleArray[i] / UINT32_RANGE) * (length - i));
     passwordChars[swapIdx] = requiredChars[i];
   }
 
