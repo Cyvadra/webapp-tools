@@ -199,14 +199,8 @@
     line-height: 1.5;
   }
 
-  button,
-  input,
-  textarea,
-  select,
-  [data-slot="button"],
-  [data-slot="input"],
-  [data-slot="textarea"] {
-    border-radius: 0 !important;
+  [class*='rounded'] {
+    border-radius: 0;
   }
 }
 
@@ -333,5 +327,16 @@
 
   .classic-theme-toggle {
     min-width: 8.5rem;
+  }
+
+  .classic-link {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .classic-link:hover {
+    color: var(--accent-foreground);
   }
 }

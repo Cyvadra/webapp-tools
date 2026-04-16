@@ -5,11 +5,20 @@ import { useTheme } from 'next-themes';
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const isDark = mounted && resolvedTheme === 'dark';
+  const isDark = resolvedTheme === 'dark';
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  if (!mounted) {
+    return (
+      <button type="button" className="classic-button classic-button-secondary classic-theme-toggle" disabled>
+        <Moon className="h-4 w-4" />
+        <span>主题切换</span>
+      </button>
+    );
+  }
 
   return (
     <button

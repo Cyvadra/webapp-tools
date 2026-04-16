@@ -137,7 +137,7 @@ export function ToolPage() {
             <section>
               <div className="mb-3 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-foreground">相关工具</h2>
-                <Link to="/" className="text-sm text-[var(--primary)] transition hover:text-[var(--accent-foreground)]">
+                <Link to="/" className="classic-link text-sm">
                   查看全部
                 </Link>
               </div>

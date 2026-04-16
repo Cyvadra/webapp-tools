@@ -147,7 +147,7 @@ export function HomePage() {
                 <button
                   type="button"
                   onClick={clearSearch}
-                  className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center text-muted-foreground transition hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)]"
+                  className="classic-button classic-button-secondary absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center p-0 text-muted-foreground"
                   aria-label="清除搜索"
                 >
                   <X className="h-4 w-4" />
