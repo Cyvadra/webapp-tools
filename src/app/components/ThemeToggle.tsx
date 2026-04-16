@@ -3,9 +3,8 @@ import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 export function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const isDark = resolvedTheme === 'dark';
   const buttonClassName = 'classic-button classic-button-secondary classic-theme-toggle px-4 py-2 text-sm';
 
   useEffect(() => {
@@ -27,16 +26,22 @@ export function ThemeToggle() {
     );
   }
 
+  const mode = theme ?? 'system';
+  const nextMode = mode === 'system' ? 'light' : mode === 'light' ? 'dark' : 'system';
+  const label = mode === 'system' ? '跟随系统' : mode === 'dark' ? '夜间模式' : '日间模式';
+  const title = nextMode === 'system' ? '切换为跟随系统' : nextMode === 'dark' ? '切换到夜间模式' : '切换到日间模式';
+  const Icon = mode === 'system' ? Monitor : mode === 'dark' ? Moon : Sun;
+
   return (
     <button
       type="button"
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={() => setTheme(nextMode)}
       className={buttonClassName}
-      aria-label={isDark ? '切换到日间模式' : '切换到夜间模式'}
-      title={isDark ? '切换到日间模式' : '切换到夜间模式'}
+      aria-label={title}
+      title={title}
     >
-      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      <span>{isDark ? '日间模式' : '夜间模式'}</span>
+      <Icon className="h-4 w-4" />
+      <span>{label}</span>
     </button>
   );
 }
