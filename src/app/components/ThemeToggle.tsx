@@ -6,6 +6,7 @@ export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const isDark = resolvedTheme === 'dark';
+  const buttonClassName = 'classic-button classic-button-secondary classic-theme-toggle px-4 py-2 text-sm';
 
   useEffect(() => {
     setMounted(true);
@@ -15,13 +16,13 @@ export function ThemeToggle() {
     return (
       <button
         type="button"
-        className="classic-button classic-button-secondary classic-theme-toggle"
+        className={buttonClassName}
         aria-label="主题切换加载中"
         title="主题切换加载中"
         disabled
       >
         <Monitor className="h-4 w-4" />
-        <span>主题切换</span>
+        <span>加载主题</span>
       </button>
     );
   }
@@ -30,7 +31,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      className="classic-button classic-button-secondary classic-theme-toggle"
+      className={buttonClassName}
       aria-label={isDark ? '切换到日间模式' : '切换到夜间模式'}
       title={isDark ? '切换到日间模式' : '切换到夜间模式'}
     >
