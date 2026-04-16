@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 export function ThemeToggle() {
@@ -13,8 +13,14 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button type="button" className="classic-button classic-button-secondary classic-theme-toggle" disabled>
-        <Moon className="h-4 w-4" />
+      <button
+        type="button"
+        className="classic-button classic-button-secondary classic-theme-toggle"
+        aria-label="主题切换加载中"
+        title="主题切换加载中"
+        disabled
+      >
+        <Monitor className="h-4 w-4" />
         <span>主题切换</span>
       </button>
     );
