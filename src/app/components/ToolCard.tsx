@@ -8,7 +8,7 @@ interface ToolCardProps {
   compact?: boolean;
 }
 
-const SQUARE_CARD_MAX_KEYWORDS = 2;
+const MAX_KEYWORDS = 2;
 
 export function ToolCard({ tool, href, compact = false }: ToolCardProps) {
   const Icon = tool.icon;
@@ -54,7 +54,7 @@ export function ToolCard({ tool, href, compact = false }: ToolCardProps) {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {tool.keywords.slice(0, SQUARE_CARD_MAX_KEYWORDS).map((keyword) => (
+          {tool.keywords.slice(0, MAX_KEYWORDS).map((keyword) => (
             <span key={keyword} className="classic-chip px-2.5 py-1 text-xs font-medium">
               {keyword}
             </span>
