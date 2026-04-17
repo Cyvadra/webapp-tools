@@ -96,6 +96,7 @@ export function HomePage() {
               <input
                 type="search"
                 placeholder="搜索工具"
+                aria-label="搜索开发者工具，支持关键词和拼音首字母"
                 value={draftQuery}
                 onChange={updateSearch}
                 onCompositionStart={handleCompositionStart}
