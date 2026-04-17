@@ -53,35 +53,33 @@ export function ToolModal({ tool, onClose }: ToolModalProps) {
   const Icon = tool.icon;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+      <div className="classic-panel tool-content flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden">
+        <div className="classic-header flex items-center justify-between border-b border-border p-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center">
-              <Icon className="w-5 h-5 text-blue-600" />
+            <div className="classic-icon-frame flex h-10 w-10 items-center justify-center">
+              <Icon className="h-5 w-5 text-[var(--accent-foreground)]" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">{tool.name}</h2>
-              <p className="text-sm text-gray-500">{tool.description}</p>
+              <h2 className="text-xl font-semibold text-foreground">{tool.name}</h2>
+              <p className="text-sm text-muted-foreground">{tool.description}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
+            className="classic-button classic-button-secondary flex h-10 w-10 items-center justify-center p-0"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="h-5 w-5 text-muted-foreground" />
           </button>
         </div>
 
-        {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
           {ToolComponent ? (
-            <Suspense fallback={<div className="text-sm text-gray-500">正在加载工具...</div>}>
+            <Suspense fallback={<div className="text-sm text-muted-foreground">正在加载工具...</div>}>
               <ToolComponent />
             </Suspense>
           ) : (
-            <div className="text-sm text-gray-500">未找到对应工具组件。</div>
+            <div className="text-sm text-muted-foreground">未找到对应工具组件。</div>
           )}
         </div>
       </div>

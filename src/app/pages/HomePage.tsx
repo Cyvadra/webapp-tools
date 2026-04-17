@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type CompositionEvent } from 'react';
-import { Search, Sparkles, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { useSearchParams } from 'react-router';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { ToolCard } from '../components/ToolCard';
-import { allCategoryId, categories, getToolPath, tools, type Tool } from '../data/tools';
+import { allCategoryId, categories, getToolPath, tools } from '../data/tools';
 import { matchesToolSearch } from '../utils/toolSearch';
 
 export function HomePage() {
@@ -30,25 +30,6 @@ export function HomePage() {
       return matchesSearch && matchesCategory;
     });
   }, [isSearching, normalizedQuery, selectedCategory]);
-
-  const groupedTools = useMemo(() => {
-    const toolGroups = new Map<string, Tool[]>();
-
-    filteredTools.forEach((tool) => {
-      if (!toolGroups.has(tool.category)) {
-        toolGroups.set(tool.category, []);
-      }
-
-      toolGroups.get(tool.category)?.push(tool);
-    });
-
-    return categories
-      .map((category) => ({
-        category,
-        tools: toolGroups.get(category.id) ?? [],
-      }))
-      .filter(({ tools: categoryTools }) => categoryTools.length > 0);
-  }, [filteredTools]);
 
   const totalCount = filteredTools.length;
 
@@ -108,46 +89,24 @@ export function HomePage() {
   return (
     <div className="classic-shell">
       <header className="classic-header sticky top-0 z-40">
-        <div className="mx-auto max-w-[1800px] px-4 py-5 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="space-y-3">
-              <div className="classic-badge inline-flex items-center gap-2 px-3 py-1 text-xs font-medium">
-                <Sparkles className="h-3.5 w-3.5" />
-                全局搜索 + 独立工具页
-              </div>
-              <div>
-                <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">开发者工具箱</h1>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-                  搜索始终覆盖所有分类；点击任意工具会进入独立页面，方便分享、收藏、开多个标签同时操作。
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-3 self-start">
-              <div className="classic-panel flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground">
-                <span className="font-semibold text-foreground">{tools.length}</span>
-                个工具
-              </div>
-              <ThemeToggle />
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+        <div className="classic-layout px-0 py-4 sm:py-5">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="search"
-                placeholder="示例：jianfan、zfcs、JSON、Base64、时间戳"
+                placeholder="搜索工具"
                 value={draftQuery}
                 onChange={updateSearch}
                 onCompositionStart={handleCompositionStart}
                 onCompositionEnd={handleCompositionEnd}
-                className="classic-input w-full py-3 pl-12 pr-12 text-sm"
+                className="classic-input w-full py-2.5 pl-11 pr-11 text-sm"
               />
               {draftQuery ? (
                 <button
                   type="button"
                   onClick={clearSearch}
-                  className="classic-button classic-button-secondary absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center p-0 text-muted-foreground"
+                  className="classic-button classic-button-secondary absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center p-0 text-muted-foreground"
                   aria-label="清除搜索"
                 >
                   <X className="h-4 w-4" />
@@ -155,12 +114,15 @@ export function HomePage() {
               ) : null}
             </div>
 
-            <div className="classic-note px-4 py-3 text-sm">
-              {isSearching ? `已在全部分类中找到 ${totalCount} 个结果` : '支持关键词、拼音首字母和模糊搜索'}
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="classic-panel px-3 py-2 text-xs text-muted-foreground sm:text-sm">
+                {isSearching || selectedCategory !== allCategoryId ? `${totalCount} 个结果` : `${tools.length} 个工具`}
+              </div>
+              <ThemeToggle />
             </div>
           </div>
 
-          <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+          <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
             <button
               type="button"
               onClick={() => updateCategory(allCategoryId)}
@@ -187,8 +149,8 @@ export function HomePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1800px] px-4 py-8 sm:px-6 lg:px-8">
-        {groupedTools.length === 0 ? (
+      <main className="classic-layout px-0 py-6 sm:py-8">
+        {filteredTools.length === 0 ? (
           <section className="classic-empty-state px-6 py-20 text-center">
             <div className="classic-icon-frame mx-auto flex h-16 w-16 items-center justify-center">
               <Search className="h-7 w-7 text-muted-foreground" />
@@ -197,25 +159,11 @@ export function HomePage() {
             <p className="mt-2 text-sm text-muted-foreground">试试更短的关键词，或者切换回全部分类继续浏览。</p>
           </section>
         ) : (
-          groupedTools.map(({ category, tools: categoryTools }) => (
-            <section key={category.id} className="mb-12 last:mb-0">
-              <div className="mb-5 flex items-center gap-3">
-                <div className="classic-icon-frame flex h-11 w-11 items-center justify-center">
-                  <category.icon className="h-5 w-5 text-[var(--accent-foreground)]" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-foreground">{category.name}</h2>
-                  <p className="text-sm text-muted-foreground">{categoryTools.length} 个工具</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-                {categoryTools.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} href={getToolPath(tool.id)} />
-                ))}
-              </div>
-            </section>
-          ))
+          <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {filteredTools.map((tool) => (
+              <ToolCard key={tool.id} tool={tool} href={getToolPath(tool.id)} />
+            ))}
+          </section>
         )}
       </main>
     </div>

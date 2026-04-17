@@ -53,11 +53,11 @@ export function ToolRenderer({ componentName }: ToolRendererProps) {
   const ToolComponent = toolComponents[componentName];
 
   if (!ToolComponent) {
-    return <div className="text-sm text-gray-500">未找到对应工具组件。</div>;
+    return <div className="text-sm text-muted-foreground">未找到对应工具组件。</div>;
   }
 
   return (
-    <Suspense fallback={<div className="text-sm text-gray-500">正在加载工具...</div>}>
+    <Suspense fallback={<div className="text-sm text-muted-foreground">正在加载工具...</div>}>
       <ToolComponent />
     </Suspense>
   );
