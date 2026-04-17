@@ -47,6 +47,14 @@
   --classic-page-bottom: #c9c3b7;
   --classic-note: #fff4ce;
   --classic-note-foreground: #604b00;
+  --tool-surface: color-mix(in srgb, var(--card) 92%, white);
+  --tool-surface-muted: color-mix(in srgb, var(--card) 82%, var(--background));
+  --tool-surface-strong: color-mix(in srgb, var(--card) 64%, var(--background));
+  --tool-border: color-mix(in srgb, var(--border) 78%, transparent);
+  --tool-danger-surface: color-mix(in srgb, var(--destructive) 10%, var(--card));
+  --tool-danger-border: color-mix(in srgb, var(--destructive) 35%, var(--border));
+  --tool-success: #1f8f54;
+  --tool-success-hover: #1b7b49;
 }
 
 .dark {
@@ -93,6 +101,14 @@
   --classic-page-bottom: #0f0f0f;
   --classic-note: #403300;
   --classic-note-foreground: #ffe38a;
+  --tool-surface: color-mix(in srgb, var(--card) 88%, #0f1522);
+  --tool-surface-muted: color-mix(in srgb, var(--card) 72%, var(--background));
+  --tool-surface-strong: color-mix(in srgb, var(--card) 52%, var(--background));
+  --tool-border: color-mix(in srgb, var(--border) 82%, transparent);
+  --tool-danger-surface: color-mix(in srgb, var(--destructive) 14%, var(--card));
+  --tool-danger-border: color-mix(in srgb, var(--destructive) 40%, var(--border));
+  --tool-success: #4cd08b;
+  --tool-success-hover: #3cbc7a;
 }
 
 @theme inline {
@@ -229,6 +245,11 @@
     color: var(--foreground);
   }
 
+  .classic-layout {
+    width: min(86vw, 1480px);
+    margin-inline: auto;
+  }
+
   .classic-header,
   .classic-panel,
   .classic-card,
@@ -357,5 +378,118 @@
 
   .classic-link:hover {
     color: var(--accent-foreground);
+  }
+
+  .tool-card-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .tool-content {
+    color: var(--foreground);
+  }
+
+  .tool-content :is(.bg-white, .bg-gray-50, .bg-gray-100) {
+    background: var(--tool-surface);
+    color: var(--foreground);
+  }
+
+  .tool-content .bg-gray-200 {
+    background: var(--tool-surface-strong);
+  }
+
+  .tool-content :is(.border-gray-200, .border-gray-300) {
+    border-color: var(--tool-border);
+  }
+
+  .tool-content :is(.text-gray-500, .text-gray-600, .text-gray-700) {
+    color: var(--muted-foreground);
+  }
+
+  .tool-content .text-gray-900 {
+    color: var(--foreground);
+  }
+
+  .tool-content :is(.text-blue-500, .text-blue-600, .text-blue-700) {
+    color: var(--primary);
+  }
+
+  .tool-content :is(.text-green-500, .text-green-600) {
+    color: var(--tool-success);
+  }
+
+  .tool-content :is(.bg-blue-500, .bg-blue-600) {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .tool-content :is(.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover) {
+    background: color-mix(in srgb, var(--primary) 86%, black 14%);
+  }
+
+  .tool-content :is(.bg-emerald-500, .bg-green-500) {
+    background: var(--tool-success);
+    color: #fff;
+  }
+
+  .tool-content :is(.hover\:bg-emerald-600:hover, .hover\:bg-green-600:hover) {
+    background: var(--tool-success-hover);
+  }
+
+  .tool-content .bg-red-50 {
+    background: var(--tool-danger-surface);
+  }
+
+  .tool-content .border-red-200 {
+    border-color: var(--tool-danger-border);
+  }
+
+  .tool-content .text-red-700 {
+    color: color-mix(in srgb, var(--destructive) 84%, var(--foreground));
+  }
+
+  .tool-content :is(
+    input:not([type='range']):not([type='color']):not([type='checkbox']):not([type='radio']),
+    textarea,
+    select
+  ) {
+    background: var(--input-background);
+    color: var(--foreground);
+    border-color: var(--tool-border);
+  }
+
+  .tool-content :is(
+    input:not([type='range']):not([type='color']):not([type='checkbox']):not([type='radio']),
+    textarea,
+    select
+  ):focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 24%, transparent);
+    outline: none;
+  }
+
+  .tool-content :is(input, textarea)::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  .tool-content select option {
+    background: var(--card);
+    color: var(--foreground);
+  }
+
+  .tool-content :is(input[type='range'], input[type='checkbox'], input[type='radio']) {
+    accent-color: var(--primary);
+  }
+
+  .tool-content input[type='color'] {
+    background: var(--tool-surface);
+    border-color: var(--tool-border);
+  }
+
+  .tool-content .hover\:bg-white:hover {
+    background: var(--tool-surface-strong);
+  }
+
+  .tool-content .drop-shadow-lg {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
   }
 }
