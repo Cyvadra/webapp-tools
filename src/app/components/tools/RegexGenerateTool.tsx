@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 interface RegexPattern {
   name: string;
@@ -97,13 +97,6 @@ const regexPatterns: RegexPattern[] = [
 
 export function RegexGenerateTool() {
   const [selectedPattern, setSelectedPattern] = useState<RegexPattern | null>(null);
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = (pattern: string) => {
-    navigator.clipboard.writeText(pattern);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <div className="space-y-4">
@@ -141,13 +134,12 @@ export function RegexGenerateTool() {
                 <div className="flex-1 bg-white rounded-lg p-3 border border-gray-300 font-mono text-sm break-all">
                   {selectedPattern.pattern}
                 </div>
-                <button
-                  onClick={() => handleCopy(selectedPattern.pattern)}
+                <CopyButton
+                  value={selectedPattern.pattern}
+                  label="复制"
+                  tone="inverse"
                   className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
-                >
-                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  复制
-                </button>
+                />
               </div>
             </div>
 

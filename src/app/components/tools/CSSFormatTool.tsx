@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 export function CSSFormatTool() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<'format' | 'compress'>('format');
-  const [copied, setCopied] = useState(false);
 
   const handleProcess = () => {
     if (!input) return;
@@ -24,12 +23,6 @@ export function CSSFormatTool() {
     } catch (error) {
       setOutput('处理失败');
     }
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -78,13 +71,12 @@ export function CSSFormatTool() {
         <div className="mb-3 flex items-center justify-between">
           <label className="block text-sm font-medium text-gray-700">处理结果</label>
           {output && (
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
+              label="复制"
+              iconClassName="w-3 h-3"
               className="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1"
-            >
-              {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3 text-gray-600" />}
-              复制
-            </button>
+            />
           )}
         </div>
         <div className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm overflow-auto whitespace-pre">

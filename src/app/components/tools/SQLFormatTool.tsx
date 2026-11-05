@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { format } from 'sql-formatter';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 const dialects = [
   { label: '标准 SQL', value: 'sql' },
@@ -16,7 +16,6 @@ export function SQLFormatTool() {
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<'format' | 'compress'>('format');
   const [dialect, setDialect] = useState<(typeof dialects)[number]['value']>('sql');
-  const [copied, setCopied] = useState(false);
 
   const handleProcess = () => {
     if (!input.trim()) {
@@ -38,12 +37,6 @@ export function SQLFormatTool() {
     } catch (error) {
       setOutput('SQL 语法有误，无法完成处理');
     }
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -100,13 +93,12 @@ export function SQLFormatTool() {
         <div className="mb-3 flex items-center justify-between">
           <label className="block text-sm font-medium text-gray-700">输出结果</label>
           {output && !output.startsWith('SQL') && (
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
+              label="复制"
+              iconClassName="w-3 h-3"
               className="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1"
-            >
-              {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3 text-gray-600" />}
-              复制
-            </button>
+            />
           )}
         </div>
 

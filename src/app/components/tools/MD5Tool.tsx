@@ -1,22 +1,15 @@
 import { useState } from 'react';
 import CryptoJS from 'crypto-js';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 export function MD5Tool() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
-  const [copied, setCopied] = useState(false);
 
   const handleEncrypt = () => {
     if (!input) return;
     const hash = CryptoJS.MD5(input).toString();
     setOutput(hash);
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -45,12 +38,10 @@ export function MD5Tool() {
             <div className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm break-all">
               {output}
             </div>
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
               className="absolute top-2 right-2 p-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-gray-600" />}
-            </button>
+            />
           </div>
         </div>
       )}

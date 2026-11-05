@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 export function JSObfuscateTool() {
   const [input, setInput] = useState('');
@@ -7,7 +7,6 @@ export function JSObfuscateTool() {
   const [controlFlowFlattening, setControlFlowFlattening] = useState(false);
   const [stringArray, setStringArray] = useState(true);
   const [compact, setCompact] = useState(true);
-  const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleObfuscate = async () => {
@@ -34,12 +33,6 @@ export function JSObfuscateTool() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -100,13 +93,12 @@ export function JSObfuscateTool() {
         <div className="mb-3 flex items-center justify-between">
           <label className="block text-sm font-medium text-gray-700">混淆结果</label>
           {output && !output.includes('失败') && (
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
+              label="复制"
+              iconClassName="w-3 h-3"
               className="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1"
-            >
-              {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3 text-gray-600" />}
-              复制
-            </button>
+            />
           )}
         </div>
 

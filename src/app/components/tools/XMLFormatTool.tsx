@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import xmlFormatter from 'xml-formatter';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 export function XMLFormatTool() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<'format' | 'compress'>('format');
   const [indentSize, setIndentSize] = useState('2');
-  const [copied, setCopied] = useState(false);
 
   const handleProcess = () => {
     if (!input.trim()) {
@@ -29,12 +28,6 @@ export function XMLFormatTool() {
     } catch (error) {
       setOutput('XML 格式错误，请检查输入内容');
     }
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -89,13 +82,12 @@ export function XMLFormatTool() {
         <div className="mb-3 flex items-center justify-between">
           <label className="block text-sm font-medium text-gray-700">输出结果</label>
           {output && !output.startsWith('XML') && (
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
+              label="复制"
+              iconClassName="w-3 h-3"
               className="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1"
-            >
-              {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3 text-gray-600" />}
-              复制
-            </button>
+            />
           )}
         </div>
 

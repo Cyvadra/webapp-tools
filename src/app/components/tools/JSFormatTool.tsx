@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 export function JSFormatTool() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
-  const [copied, setCopied] = useState(false);
 
   const handleFormat = () => {
     if (!input) return;
@@ -67,12 +66,6 @@ export function JSFormatTool() {
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <div className="grid grid-cols-2 gap-4 h-[600px]">
       <div className="flex flex-col">
@@ -97,13 +90,12 @@ export function JSFormatTool() {
         <div className="mb-3 flex items-center justify-between">
           <label className="block text-sm font-medium text-gray-700">格式化结果</label>
           {output && (
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
+              label="复制"
+              iconClassName="w-3 h-3"
               className="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1"
-            >
-              {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3 text-gray-600" />}
-              复制
-            </button>
+            />
           )}
         </div>
         <div className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm overflow-auto whitespace-pre">

@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 export function ColorPickerTool() {
   const [color, setColor] = useState('#3b82f6');
-  const [copied, setCopied] = useState<string>('');
 
   const hexToRgb = (hex: string) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -59,12 +58,6 @@ export function ColorPickerTool() {
     { label: 'HSL', value: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` },
     { label: 'HSLA', value: `hsla(${hsl.h}, ${hsl.s}%, ${hsl.l}%, 1)` },
   ];
-
-  const handleCopy = (value: string, key: string) => {
-    navigator.clipboard.writeText(value);
-    setCopied(key);
-    setTimeout(() => setCopied(''), 2000);
-  };
 
   const presetColors = [
     '#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e',
@@ -131,16 +124,10 @@ export function ColorPickerTool() {
                   <div className="text-sm text-gray-600 mb-1">{format.label}</div>
                   <div className="font-mono text-gray-900">{format.value}</div>
                 </div>
-                <button
-                  onClick={() => handleCopy(format.value, format.label)}
+                <CopyButton
+                  value={format.value}
                   className="p-2 hover:bg-white rounded transition-colors"
-                >
-                  {copied === format.label ? (
-                    <Check className="w-4 h-4 text-green-500" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-gray-600" />
-                  )}
-                </button>
+                />
               </div>
             </div>
           ))}

@@ -1,68 +1,19 @@
 import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
+import { formatHtml } from '../../utils/htmlFormatter';
 
 export function HTMLFormatTool() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
-  const [copied, setCopied] = useState(false);
 
   const handleFormat = () => {
-    if (!input) return;
+    if (!input.trim()) return;
+
     try {
-      let formatted = input.trim();
-      let indentLevel = 0;
-      const indentSize = 2;
-      let result = '';
-      let inTag = false;
-      let tagContent = '';
-
-      for (let i = 0; i < formatted.length; i++) {
-        const char = formatted[i];
-
-        if (char === '<') {
-          if (tagContent.trim()) {
-            result += tagContent.trim();
-            tagContent = '';
-          }
-          inTag = true;
-
-          if (formatted[i + 1] === '/') {
-            indentLevel--;
-            result += '\n' + ' '.repeat(indentLevel * indentSize);
-          } else if (i > 0 && formatted[i - 1] !== '>') {
-            result += '\n' + ' '.repeat(indentLevel * indentSize);
-          }
-          result += char;
-        } else if (char === '>') {
-          result += char;
-          inTag = false;
-
-          const tagMatch = result.match(/<(\w+)[^>]*>$/);
-          if (tagMatch && !result.endsWith('/>') && formatted[i - 1] !== '/') {
-            const tagName = tagMatch[1];
-            if (!['img', 'br', 'hr', 'input', 'meta', 'link'].includes(tagName.toLowerCase())) {
-              if (formatted[i + 1] !== '<') {
-                indentLevel++;
-              }
-            }
-          }
-        } else if (inTag) {
-          result += char;
-        } else {
-          tagContent += char;
-        }
-      }
-
-      setOutput(result);
-    } catch (error) {
+      setOutput(formatHtml(input));
+    } catch {
       setOutput('格式化失败');
     }
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -79,7 +30,7 @@ export function HTMLFormatTool() {
         </div>
         <textarea
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(event) => setInput(event.target.value)}
           placeholder="请输入 HTML 代码..."
           className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono text-sm"
         />
@@ -89,13 +40,12 @@ export function HTMLFormatTool() {
         <div className="mb-3 flex items-center justify-between">
           <label className="block text-sm font-medium text-gray-700">格式化结果</label>
           {output && (
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
+              label="复制"
+              iconClassName="w-3 h-3"
               className="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1"
-            >
-              {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3 text-gray-600" />}
-              复制
-            </button>
+            />
           )}
         </div>
         <div className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm overflow-auto whitespace-pre">

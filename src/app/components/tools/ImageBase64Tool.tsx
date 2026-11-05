@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Upload, Image as ImageIcon } from 'lucide-react';
+import { Upload } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 export function ImageBase64Tool() {
   const [base64, setBase64] = useState('');
@@ -120,12 +121,13 @@ export function ImageBase64Tool() {
             readOnly
             className="w-full h-32 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-mono text-xs overflow-auto"
           />
-          <button
-            onClick={() => navigator.clipboard.writeText(base64)}
-            className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm"
-          >
-            复制 Base64
-          </button>
+          <CopyButton
+            value={base64}
+            label="复制 Base64"
+            copiedLabel="已复制"
+            tone="inverse"
+            className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm flex items-center gap-2"
+          />
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Copy, Check, RefreshCw, ClipboardList } from 'lucide-react';
+import { RefreshCw, ClipboardList } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 const LOWERCASE = 'abcdefghijklmnopqrstuvwxyz';
 const UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -87,8 +88,6 @@ export function PasswordGeneratorTool() {
   const [useSeparators, setUseSeparators] = useState(false);
   const [useSpecial, setUseSpecial] = useState(false);
   const [passwords, setPasswords] = useState<string[]>([]);
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [copiedAll, setCopiedAll] = useState(false);
 
   const noneSelected = !useLower && !useUpper && !useNumbers && !useSeparators && !useSpecial;
 
@@ -98,26 +97,6 @@ export function PasswordGeneratorTool() {
       generatePassword(length, useLower, useUpper, useNumbers, useSeparators, useSpecial),
     );
     setPasswords(generated);
-    setCopiedIndex(null);
-    setCopiedAll(false);
-  };
-
-  const handleCopyOne = (index: number) => {
-    navigator.clipboard.writeText(passwords[index]).then(() => {
-      setCopiedIndex(index);
-      setTimeout(() => setCopiedIndex(null), 2000);
-    }).catch(() => {
-      alert('复制失败，请手动复制');
-    });
-  };
-
-  const handleCopyAll = () => {
-    navigator.clipboard.writeText(passwords.join('\n')).then(() => {
-      setCopiedAll(true);
-      setTimeout(() => setCopiedAll(false), 2000);
-    }).catch(() => {
-      alert('复制失败，请手动复制');
-    });
   };
 
   const checkboxClass = (active: boolean) =>
@@ -257,17 +236,14 @@ export function PasswordGeneratorTool() {
             <label className="block text-sm font-medium text-gray-700">
               生成结果（共 {passwords.length} 个）
             </label>
-            <button
-              onClick={handleCopyAll}
+            <CopyButton
+              value={passwords.join('\n')}
+              label="全部复制"
+              copiedLabel="已复制"
+              icon={ClipboardList}
+              iconClassName="w-3.5 h-3.5"
               className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors text-gray-600"
-            >
-              {copiedAll ? (
-                <Check className="w-3.5 h-3.5 text-green-500" />
-              ) : (
-                <ClipboardList className="w-3.5 h-3.5" />
-              )}
-              {copiedAll ? '已复制' : '全部复制'}
-            </button>
+            />
           </div>
           <div className="space-y-2">
             {passwords.map((pw, i) => (
@@ -276,17 +252,11 @@ export function PasswordGeneratorTool() {
                 className="flex items-center gap-2 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg"
               >
                 <span className="flex-1 font-mono text-sm break-all text-gray-900">{pw}</span>
-                <button
-                  onClick={() => handleCopyOne(i)}
-                  className="shrink-0 p-1.5 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                <CopyButton
+                  value={pw}
                   title="复制"
-                >
-                  {copiedIndex === i ? (
-                    <Check className="w-4 h-4 text-green-500" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-gray-600" />
-                  )}
-                </button>
+                  className="shrink-0 p-1.5 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                />
               </div>
             ))}
           </div>

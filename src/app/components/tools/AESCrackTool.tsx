@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import CryptoJS from 'crypto-js';
-import { Copy, Check, Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 // Common weak passwords / 常见弱口令列表
 const WEAK_PASSWORDS = [
@@ -43,7 +44,6 @@ export function AESCrackTool() {
   const [output, setOutput] = useState('');
   const [status, setStatus] = useState<'idle' | 'running' | 'done'>('idle');
   const [result, setResult] = useState<CrackResult | null>(null);
-  const [copied, setCopied] = useState(false);
   const [progress, setProgress] = useState(0);
   const cancelledRef = useRef(false);
 
@@ -95,13 +95,6 @@ export function AESCrackTool() {
   const handleCancel = () => {
     cancelledRef.current = true;
     setStatus('done');
-  };
-
-  const handleCopy = () => {
-    if (!output) return;
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -183,16 +176,10 @@ export function AESCrackTool() {
             <div className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm break-all max-h-64 overflow-y-auto">
               {output}
             </div>
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
               className="absolute top-2 right-2 p-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              {copied ? (
-                <Check className="w-4 h-4 text-green-500" />
-              ) : (
-                <Copy className="w-4 h-4 text-gray-600" />
-              )}
-            </button>
+            />
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Copy, Check, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 const htmlEntities: Record<string, string> = {
   '&': '&amp;',
@@ -26,7 +27,6 @@ export function HTMLEntityTool() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
-  const [copied, setCopied] = useState(false);
 
   const handleConvert = () => {
     if (!input) return;
@@ -49,12 +49,6 @@ export function HTMLEntityTool() {
     } catch (error) {
       setOutput('转换失败');
     }
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -110,12 +104,10 @@ export function HTMLEntityTool() {
             <div className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm break-all max-h-64 overflow-y-auto">
               {output}
             </div>
-            <button
-              onClick={handleCopy}
+            <CopyButton
+              value={output}
               className="absolute top-2 right-2 p-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-gray-600" />}
-            </button>
+            />
           </div>
         </div>
       )}

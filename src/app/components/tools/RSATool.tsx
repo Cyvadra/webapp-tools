@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 function arrayBufferToBase64(buffer: ArrayBuffer) {
   const bytes = new Uint8Array(buffer);
@@ -69,13 +69,6 @@ export function RSATool() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [status, setStatus] = useState('浏览器端使用 RSA-OAEP 2048 / SHA-256');
-  const [copied, setCopied] = useState('');
-
-  const handleCopy = (value: string, key: string) => {
-    navigator.clipboard.writeText(value);
-    setCopied(key);
-    setTimeout(() => setCopied(''), 2000);
-  };
 
   const handleGenerateKeys = async () => {
     try {
@@ -165,13 +158,12 @@ export function RSATool() {
             <div className="flex items-center justify-between">
               <label className="block text-sm font-medium text-gray-700">公钥</label>
               {publicKeyPem && (
-                <button
-                  onClick={() => handleCopy(publicKeyPem, 'public')}
+                <CopyButton
+                  value={publicKeyPem}
+                  label="复制"
+                  iconClassName="w-3 h-3"
                   className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
-                >
-                  {copied === 'public' ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
-                  复制
-                </button>
+                />
               )}
             </div>
             <textarea
@@ -185,13 +177,12 @@ export function RSATool() {
             <div className="flex items-center justify-between">
               <label className="block text-sm font-medium text-gray-700">私钥</label>
               {privateKeyPem && (
-                <button
-                  onClick={() => handleCopy(privateKeyPem, 'private')}
+                <CopyButton
+                  value={privateKeyPem}
+                  label="复制"
+                  iconClassName="w-3 h-3"
                   className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
-                >
-                  {copied === 'private' ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
-                  复制
-                </button>
+                />
               )}
             </div>
             <textarea
@@ -240,13 +231,12 @@ export function RSATool() {
             <div className="flex items-center justify-between mb-2">
               <label className="block text-sm font-medium text-gray-700">输出结果</label>
               {output && (
-                <button
-                  onClick={() => handleCopy(output, 'output')}
+                <CopyButton
+                  value={output}
+                  label="复制"
+                  iconClassName="w-3 h-3"
                   className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
-                >
-                  {copied === 'output' ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
-                  复制
-                </button>
+                />
               )}
             </div>
             <div className="h-48 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg overflow-auto whitespace-pre-wrap break-all font-mono text-sm">

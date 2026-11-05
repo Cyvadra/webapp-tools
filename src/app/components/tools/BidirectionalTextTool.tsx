@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, Copy, Eraser } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Eraser } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 type Transform = (value: string) => string | Promise<string>;
 
@@ -36,7 +37,6 @@ export function BidirectionalTextTool({
 }: BidirectionalTextToolProps) {
   const [leftValue, setLeftValue] = useState('');
   const [rightValue, setRightValue] = useState('');
-  const [copiedSide, setCopiedSide] = useState<'left' | 'right' | null>(null);
   const [pendingDirection, setPendingDirection] = useState<'ltr' | 'rtl' | null>(null);
 
   const textareaClassName = [
@@ -92,14 +92,6 @@ export function BidirectionalTextTool({
     }
   };
 
-  const handleCopy = (value: string, side: 'left' | 'right') => {
-    navigator.clipboard.writeText(value);
-    setCopiedSide(side);
-    setTimeout(() => setCopiedSide(null), 2000);
-  };
-
-  const leftCopied = copiedSide === 'left';
-  const rightCopied = copiedSide === 'right';
   const actionButtonClassName =
     'flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400';
 
@@ -110,14 +102,12 @@ export function BidirectionalTextTool({
           <label className="block text-sm font-medium text-slate-700">{leftTitle}</label>
           <div className="flex items-center gap-2">
             {leftValue ? (
-              <button
-                type="button"
-                onClick={() => handleCopy(leftValue, 'left')}
+              <CopyButton
+                value={leftValue}
+                label="复制"
+                iconClassName="h-3 w-3"
                 className="flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm transition-colors hover:bg-slate-50"
-              >
-                {leftCopied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3 text-gray-600" />}
-                复制
-              </button>
+              />
             ) : null}
             <button
               type="button"
@@ -166,14 +156,12 @@ export function BidirectionalTextTool({
           <label className="block text-sm font-medium text-slate-700">{rightTitle}</label>
           <div className="flex items-center gap-2">
             {rightValue ? (
-              <button
-                type="button"
-                onClick={() => handleCopy(rightValue, 'right')}
+              <CopyButton
+                value={rightValue}
+                label="复制"
+                iconClassName="h-3 w-3"
                 className="flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm transition-colors hover:bg-slate-50"
-              >
-                {rightCopied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3 text-gray-600" />}
-                复制
-              </button>
+              />
             ) : null}
             <button
               type="button"

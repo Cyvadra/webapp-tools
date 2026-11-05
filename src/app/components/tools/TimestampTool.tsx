@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Copy, Check, Clock } from 'lucide-react';
+import { Clock } from 'lucide-react';
+import { CopyButton } from '../CopyButton';
 
 import {
   Select,
@@ -96,7 +97,6 @@ export function TimestampTool() {
   const [timeZone, setTimeZone] = useState<(typeof timezoneOptions)[number]['value']>('Asia/Shanghai');
   const [timestampResult, setTimestampResult] = useState('');
   const [dateResult, setDateResult] = useState('');
-  const [copied, setCopied] = useState<string>('');
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -134,12 +134,6 @@ export function TimestampTool() {
     }
   };
 
-  const handleCopy = (text: string, key: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(key);
-    setTimeout(() => setCopied(''), 2000);
-  };
-
   const currentDate = formatDateInTimeZone(currentTimestamp * 1000, timeZone);
   const selectedTimezoneLabel =
     timezoneOptions.find((option) => option.value === timeZone)?.label ?? timeZone;
@@ -173,12 +167,10 @@ export function TimestampTool() {
             <div className="text-sm text-gray-600 mb-1">Unix 时间戳（秒）</div>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-mono font-semibold text-blue-600">{currentTimestamp}</span>
-              <button
-                onClick={() => handleCopy(currentTimestamp.toString(), 'current')}
+              <CopyButton
+                value={currentTimestamp.toString()}
                 className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                {copied === 'current' ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-gray-600" />}
-              </button>
+              />
             </div>
           </div>
           <div className="bg-white rounded-lg p-4">
@@ -211,12 +203,10 @@ export function TimestampTool() {
           {timestampResult && (
             <div className="flex items-center justify-between bg-gray-50 rounded-lg p-4">
               <span className="font-mono text-gray-900">{timestampResult}</span>
-              <button
-                onClick={() => handleCopy(timestampResult, 'timestamp')}
+              <CopyButton
+                value={timestampResult}
                 className="p-2 hover:bg-white rounded transition-colors"
-              >
-                {copied === 'timestamp' ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-gray-600" />}
-              </button>
+              />
             </div>
           )}
         </div>
@@ -244,12 +234,10 @@ export function TimestampTool() {
           {dateResult && (
             <div className="flex items-center justify-between bg-gray-50 rounded-lg p-4">
               <span className="font-mono text-gray-900">{dateResult}</span>
-              <button
-                onClick={() => handleCopy(dateResult, 'date')}
+              <CopyButton
+                value={dateResult}
                 className="p-2 hover:bg-white rounded transition-colors"
-              >
-                {copied === 'date' ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-gray-600" />}
-              </button>
+              />
             </div>
           )}
         </div>
